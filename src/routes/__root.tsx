@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { Header, Footer } from "../components/site/Layout";
 
 function NotFoundComponent() {
   return (
@@ -29,11 +30,10 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Khaleej Careers — Gulf Talent Network" },
+      { name: "description", content: "Connecting Gulf job seekers with leading employers across the GCC." },
+      { property: "og:title", content: "Khaleej Careers" },
+      { property: "og:description", content: "Bridging the gap between Gulf employers and Gulf talent." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -65,5 +65,11 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1"><Outlet /></main>
+      <Footer />
+    </div>
+  );
 }

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as EmployersRouteImport } from './routes/employers'
+import { Route as CompanyProfileRouteImport } from './routes/company-profile'
 import { Route as CandidatesRouteImport } from './routes/candidates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const PricingRoute = PricingRouteImport.update({
 const EmployersRoute = EmployersRouteImport.update({
   id: '/employers',
   path: '/employers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyProfileRoute = CompanyProfileRouteImport.update({
+  id: '/company-profile',
+  path: '/company-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CandidatesRoute = CandidatesRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/candidates': typeof CandidatesRoute
+  '/company-profile': typeof CompanyProfileRoute
   '/employers': typeof EmployersRoute
   '/pricing': typeof PricingRoute
   '/terms': typeof TermsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/candidates': typeof CandidatesRoute
+  '/company-profile': typeof CompanyProfileRoute
   '/employers': typeof EmployersRoute
   '/pricing': typeof PricingRoute
   '/terms': typeof TermsRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/candidates': typeof CandidatesRoute
+  '/company-profile': typeof CompanyProfileRoute
   '/employers': typeof EmployersRoute
   '/pricing': typeof PricingRoute
   '/terms': typeof TermsRoute
@@ -78,16 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/candidates'
+    | '/company-profile'
     | '/employers'
     | '/pricing'
     | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/candidates' | '/employers' | '/pricing' | '/terms'
+  to:
+    | '/'
+    | '/auth'
+    | '/candidates'
+    | '/company-profile'
+    | '/employers'
+    | '/pricing'
+    | '/terms'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/candidates'
+    | '/company-profile'
     | '/employers'
     | '/pricing'
     | '/terms'
@@ -97,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   CandidatesRoute: typeof CandidatesRoute
+  CompanyProfileRoute: typeof CompanyProfileRoute
   EmployersRoute: typeof EmployersRoute
   PricingRoute: typeof PricingRoute
   TermsRoute: typeof TermsRoute
@@ -123,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/employers'
       fullPath: '/employers'
       preLoaderRoute: typeof EmployersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company-profile': {
+      id: '/company-profile'
+      path: '/company-profile'
+      fullPath: '/company-profile'
+      preLoaderRoute: typeof CompanyProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/candidates': {
@@ -153,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   CandidatesRoute: CandidatesRoute,
+  CompanyProfileRoute: CompanyProfileRoute,
   EmployersRoute: EmployersRoute,
   PricingRoute: PricingRoute,
   TermsRoute: TermsRoute,

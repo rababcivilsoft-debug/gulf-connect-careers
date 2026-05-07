@@ -10,6 +10,7 @@ export function Header() {
   const nav = [
     { to: "/", label: "Home" },
     ...(session?.role === "employer" ? [{ to: "/employers", label: "For Employers" }] : []),
+    ...(session?.role === "employer" ? [{ to: "/company-profile", label: "Company Profile" }] : []),
     ...(session?.role === "candidate" ? [{ to: "/candidates", label: "For Candidates" }] : []),
     { to: "/pricing", label: "Pricing" },
     { to: "/terms", label: "Terms" },

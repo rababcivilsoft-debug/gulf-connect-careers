@@ -1,18 +1,19 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-
-const nav = [
-  { to: "/", label: "Home" },
-  { to: "/employers", label: "For Employers" },
-  { to: "/candidates", label: "For Candidates" },
-  { to: "/pricing", label: "Pricing" },
-  { to: "/terms", label: "Terms" },
-];
+import { useSession, setSession } from "../../lib/auth";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
+  const session = useSession();
+  const nav = [
+    { to: "/", label: "Home" },
+    ...(session?.role === "employer" ? [{ to: "/employers", label: "For Employers" }] : []),
+    ...(session?.role === "candidate" ? [{ to: "/candidates", label: "For Candidates" }] : []),
+    { to: "/pricing", label: "Pricing" },
+    { to: "/terms", label: "Terms" },
+  ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
@@ -37,13 +38,24 @@ export function Header() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 md:flex">
-          <Link to="/auth" className="text-sm font-medium text-foreground hover:text-primary">Sign in</Link>
-          <Link
-            to="/auth"
-            className="inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground shadow-gold transition-transform hover:-translate-y-0.5"
-          >
-            Get Started
-          </Link>
+          {session ? (
+            <button
+              onClick={() => setSession(null)}
+              className="inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground shadow-gold transition-transform hover:-translate-y-0.5"
+            >
+              Sign out
+            </button>
+          ) : (
+            <>
+              <Link to="/auth" className="text-sm font-medium text-foreground hover:text-primary">Sign in</Link>
+              <Link
+                to="/auth"
+                className="inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground shadow-gold transition-transform hover:-translate-y-0.5"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
         <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X /> : <Menu />}
@@ -57,9 +69,18 @@ export function Header() {
                 {n.label}
               </Link>
             ))}
-            <Link to="/auth" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground">
-              Get Started
-            </Link>
+            {session ? (
+              <button
+                onClick={() => { setSession(null); setOpen(false); }}
+                className="mt-2 inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground"
+              >
+                Sign out
+              </button>
+            ) : (
+              <Link to="/auth" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center rounded-md bg-gold-gradient px-4 py-2 text-sm font-semibold text-gold-foreground">
+                Get Started
+              </Link>
+            )}
           </div>
         </div>
       )}

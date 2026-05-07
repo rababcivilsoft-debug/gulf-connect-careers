@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Building2, User } from "lucide-react";
+import { setSession } from "../lib/auth";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — Khaleej Careers" }]}),
@@ -11,6 +12,15 @@ function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [role, setRole] = useState<"candidate" | "employer">("candidate");
   const [agreed, setAgreed] = useState(false);
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mode === "signup" && !agreed) return;
+    setSession({ role, email: email || "demo@example.com" });
+    navigate({ to: role === "employer" ? "/employers" : "/candidates" });
+  };
 
   return (
     <div className="container mx-auto max-w-md px-4 py-20">
@@ -27,8 +37,7 @@ function AuthPage() {
           <button onClick={() => setMode("signin")} className={`rounded-lg py-2 text-sm font-semibold ${mode === "signin" ? "bg-card shadow" : "text-muted-foreground"}`}>Sign in</button>
         </div>
 
-        {mode === "signup" && (
-          <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="mt-5 grid grid-cols-2 gap-3">
             {[
               { v: "candidate", label: "Job Seeker", icon: User },
               { v: "employer", label: "Employer", icon: Building2 },
@@ -37,17 +46,16 @@ function AuthPage() {
                 <r.icon className="h-5 w-5" />{r.label}
               </button>
             ))}
-          </div>
-        )}
+        </div>
 
-        <form className="mt-5 space-y-3" onSubmit={(e) => e.preventDefault()}>
+        <form className="mt-5 space-y-3" onSubmit={handleSubmit}>
           {mode === "signup" && role === "employer" && (
             <Input label="Company name" placeholder="ACME Holdings LLC" />
           )}
           {mode === "signup" && role === "candidate" && (
             <Input label="Full name" placeholder="Your name" />
           )}
-          <Input label="Email" type="email" placeholder="you@example.com" />
+          <Input label="Email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
           <Input label="Password" type="password" placeholder="••••••••" />
           {mode === "signup" && (
             <label className="flex items-start gap-2 pt-1 text-xs text-muted-foreground">

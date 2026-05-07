@@ -4,7 +4,8 @@ import { Lock } from "lucide-react";
 
 export function RoleGuard({ role, children }: { role: Role; children: React.ReactNode }) {
   const session = useSession();
-  if (session?.role === role) return <>{children}</>;
+  const sessionRole = session?.user?.role;
+  if (sessionRole === role) return <>{children}</>;
 
   const label = role === "employer" ? "Employer" : "Candidate";
   return (
@@ -17,7 +18,7 @@ export function RoleGuard({ role, children }: { role: Role; children: React.Reac
       </h1>
       <p className="mt-3 text-muted-foreground">
         {session
-          ? `You're signed in as a ${session.role}. Sign in with a ${role} account to view this page.`
+          ? `You're signed in as a ${sessionRole ?? "different role"}. Sign in with a ${role} account to view this page.`
           : `Please sign in as a ${role} to access this section.`}
       </p>
       <Link

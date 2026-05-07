@@ -7,10 +7,11 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
   const session = useSession();
+  const sessionRole = session?.user?.role;
   const nav = [
     { to: "/", label: "Home" },
-    ...(session?.role === "employer" ? [{ to: "/employers", label: "For Employers" }] : []),
-    ...(session?.role === "candidate" ? [{ to: "/candidates", label: "For Candidates" }] : []),
+    ...(sessionRole === "employer" ? [{ to: "/employers", label: "For Employers" }] : []),
+    ...(sessionRole === "candidate" ? [{ to: "/candidates", label: "For Candidates" }] : []),
     { to: "/pricing", label: "Pricing" },
     { to: "/terms", label: "Terms" },
   ];

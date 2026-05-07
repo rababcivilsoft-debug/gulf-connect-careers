@@ -2,13 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Sparkles, Lock, MapPin, Briefcase, GraduationCap, Wallet, CheckCircle2 } from "lucide-react";
 import { CANDIDATES, applyFilters, parseQuery, type Filters } from "../lib/candidates";
+import { RoleGuard } from "../components/site/RoleGuard";
 
 export const Route = createFileRoute("/employers")({
   head: () => ({ meta: [
     { title: "For Employers — Khaleej Careers" },
     { name: "description", content: "Search verified Gulf candidates with AI-powered natural language search." },
   ]}),
-  component: EmployersPage,
+  component: () => <RoleGuard role="employer"><EmployersPage /></RoleGuard>,
 });
 
 function EmployersPage() {

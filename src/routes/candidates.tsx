@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Upload, Sparkles, CheckCircle2, FileText } from "lucide-react";
+import { RoleGuard } from "../components/site/RoleGuard";
 
 export const Route = createFileRoute("/candidates")({
   head: () => ({ meta: [
     { title: "For Candidates — Khaleej Careers" },
     { name: "description", content: "Upload your CV. AI builds your profile in seconds." },
   ]}),
-  component: CandidatesPage,
+  component: () => <RoleGuard role="candidate"><CandidatesPage /></RoleGuard>,
 });
 
 type Profile = {
